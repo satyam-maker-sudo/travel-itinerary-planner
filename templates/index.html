@@ -3,10 +3,10 @@
 
 <head>
 
-    <title>Travel Planner</title>
+<title>Smart Travel Planner</title>
 
-    <link rel="stylesheet"
-    href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
@@ -14,80 +14,102 @@
 
 <div class="container">
 
-    <h1>Travel Itinerary Planner</h1>
+<h1>Smart Travel Itinerary Planner</h1>
 
-    <form method="POST">
+<form method="POST">
 
-        <input type="text"
-        name="destination"
-        placeholder="Enter Destination"
-        required>
+<input type="text"
+name="destination"
+placeholder="Enter Destination"
+required>
 
-        <input type="number"
-        name="days"
-        placeholder="Number of Days"
-        required>
+<input type="number"
+name="days"
+placeholder="Number of Days"
+required>
 
-        <input type="number"
-        name="people"
-        placeholder="Number of People"
-        required>
+<input type="number"
+name="people"
+placeholder="Number of People"
+required>
 
-        <!-- BUDGET DROPDOWN -->
+<select name="budget" required>
 
-        <select name="budget" required>
+<option value="Low">Low Budget</option>
 
-            <option value="Low">Low Budget</option>
+<option value="Medium">Medium Budget</option>
 
-            <option value="Medium">Medium Budget</option>
+<option value="High">High Budget</option>
 
-            <option value="High">High Budget</option>
+</select>
 
-        </select>
+<button type="submit">
+Generate Smart Plan
+</button>
 
-        <button type="submit">
-            Generate Plan
-        </button>
+</form>
 
-    </form>
+{% if itinerary %}
 
-    {% if itinerary %}
+<div class="result">
 
-    <div class="result">
+<h2>🏨 Recommended Hotel</h2>
 
-        <h2>Recommended Hotel</h2>
+<p>{{ hotel }}</p>
 
-        <p>{{ hotel }}</p>
+<h2>💰 Estimated Budget</h2>
 
-        <h2>Estimated Total Price</h2>
+<p>₹ {{ total_price }}</p>
 
-        <p>₹ {{ total_price }}</p>
+<h2>🍴 Food Recommendations</h2>
 
-        <h2>Travel Itinerary</h2>
+<ul>
 
-        {% for day in itinerary %}
+{% for food in foods %}
 
-        <div class="day">
+<li>{{ food }}</li>
 
-            <h3>Day {{ loop.index }}</h3>
+{% endfor %}
 
-            <ul>
+</ul>
 
-                {% for place in day %}
+<h2>🎉 Fun Activities</h2>
 
-                <li>{{ place }}</li>
+<ul>
 
-                {% endfor %}
+{% for activity in activities %}
 
-            </ul>
+<li>{{ activity }}</li>
 
-        </div>
+{% endfor %}
 
-        {% endfor %}
+</ul>
 
-    </div>
+<h2>📍 Day-wise Itinerary</h2>
 
-    {% endif %}
+{% for day in itinerary %}
+
+<div class="day">
+
+<h3>Day {{ loop.index }}</h3>
+
+<ul>
+
+{% for place in day %}
+
+<li>{{ place }}</li>
+
+{% endfor %}
+
+</ul>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
 
 </div>
 

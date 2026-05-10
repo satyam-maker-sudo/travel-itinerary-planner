@@ -8,7 +8,6 @@ app.secret_key = "travelplanner"
 # LOGIN
 
 @app.route('/', methods=['GET', 'POST'])
-
 def login():
 
     if request.method == 'POST':
@@ -17,7 +16,6 @@ def login():
         password = request.form['password']
 
         conn = sqlite3.connect('travel.db')
-
         cursor = conn.cursor()
 
         cursor.execute('''
@@ -41,10 +39,10 @@ def login():
 
     return render_template('login.html')
 
+
 # REGISTER
 
 @app.route('/register', methods=['GET', 'POST'])
-
 def register():
 
     if request.method == 'POST':
@@ -53,7 +51,6 @@ def register():
         password = request.form['password']
 
         conn = sqlite3.connect('travel.db')
-
         cursor = conn.cursor()
 
         cursor.execute('''
@@ -69,15 +66,18 @@ def register():
 
     return render_template('register.html')
 
+
 # PLANNER
 
 @app.route('/planner', methods=['GET', 'POST'])
-
 def planner():
 
     itinerary = []
     hotel = ""
     total_price = 0
+
+    foods = []
+    activities = []
 
     if request.method == 'POST':
 
@@ -87,13 +87,13 @@ def planner():
         budget = request.form['budget']
 
         conn = sqlite3.connect('travel.db')
-
         cursor = conn.cursor()
 
         # FETCH PLACES
 
         cursor.execute('''
-        SELECT place_name FROM places
+        SELECT place_name
+        FROM places
         WHERE city=?
         ''', (destination,))
 
@@ -111,7 +111,33 @@ def planner():
 
         hotel_data = cursor.fetchone()
 
+        # FETCH FOOD
+
+        cursor.execute('''
+        SELECT restaurant
+        FROM food_places
+        WHERE city=?
+        ''', (destination,))
+
+        foods_data = cursor.fetchall()
+
+        foods = [item[0] for item in foods_data]
+
+        # FETCH ACTIVITIES
+
+        cursor.execute('''
+        SELECT activity
+        FROM activities
+        WHERE city=?
+        ''', (destination,))
+
+        activities_data = cursor.fetchall()
+
+        activities = [item[0] for item in activities_data]
+
         conn.close()
+
+        # HOTEL PRICE
 
         if hotel_data:
 
@@ -121,29 +147,29 @@ def planner():
 
             total_price = hotel_price * people * days
 
-        # ITINERARY
+        # DAY-WISE ITINERARY
 
         if len(places) > 0:
 
-            places_per_day = max(1, len(places)//days)
-
             for i in range(days):
 
-                start = i * places_per_day
-                end = start + places_per_day
+                if i < len(places):
 
-                day_places = places[start:end]
+                    itinerary.append([places[i]])
 
-                if day_places:
-                    itinerary.append(day_places)
+                else:
+
+                    itinerary.append(["Free Day / Shopping / Relax"])
 
     return render_template(
         'index.html',
         itinerary=itinerary,
         hotel=hotel,
-        total_price=total_price
+        total_price=total_price,
+        foods=foods,
+        activities=activities
     )
+
 
 if __name__ == '__main__':
     app.run(debug=True)
- 
