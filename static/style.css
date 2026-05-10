@@ -1,0 +1,61 @@
+body {
+
+    background: #f2f2f2;
+    font-family: Arial;
+
+}
+
+.container {
+
+    width: 60%;
+    margin: auto;
+    margin-top: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+
+}
+
+h1 {
+
+    text-align: center;
+
+}
+
+form {
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+input, select {
+
+    margin: 10px 0;
+    padding: 12px;
+
+}
+
+button {
+
+    padding: 12px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+
+}
+
+button:hover {
+
+    background: #0056b3;
+
+}
+
+.day {
+
+    background: #f8f8f8;
+    padding: 15px;
+    margin-top: 10px;
+
+}
