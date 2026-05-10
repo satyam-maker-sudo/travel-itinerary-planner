@@ -146,7 +146,4 @@ def planner():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    from flask import redirect
-    @app.route('/')
-def home():
-    return redirect('/login')
+ 
